@@ -7,7 +7,7 @@ use itertools::Itertools;
 #[command(version, about, long_about = None)]
 struct Args {
     /// The command to launch the game with.
-    #[arg(short, long, num_args(2), value_names = ["Launch Option Name", "Launch Command"])]
+    #[arg(short, long, num_args(2), value_names = ["Launch Option Name", "Launch Command"], required(true))]
     launch: Vec<String>,
 
     /// This is where you need to put %command% in the launch options.
@@ -37,6 +37,7 @@ pub struct RefinedArgs {
     pub launch_options: Vec<LaunchOption>,
 }
 
+#[derive(Clone, Debug)]
 pub struct LaunchOption {
     pub name: String,
     pub command: String,
