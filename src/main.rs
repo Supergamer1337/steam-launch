@@ -1,21 +1,15 @@
-use std::process::Command;
+mod args;
 
-use clap::Parser;
-
-/// Simple program to have multiple custom launch options for
-/// steam games.
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Args {
-    /// The command to launch the game with.
-    #[arg(short, long)]
-    launch: String,
-}
+use args::args;
 
 fn main() {
-    let args = Args::parse();
+    let args = args();
 
-    Command::new(args.launch)
-        .spawn()
-        .expect("Failed to launch game.");
+    for (name, command) in args.launch_options.iter().map(|x| (&x.name, &x.command)) {
+        println!("{}: {}", name, command);
+    }
+
+    // Command::new(args.launch)
+    //     .spawn()
+    //     .expect("Failed to launch game.");
 }
