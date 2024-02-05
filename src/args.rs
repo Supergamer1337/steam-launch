@@ -1,5 +1,4 @@
 use clap::{arg, Parser};
-use itertools::Itertools;
 
 /// Simple program to have multiple custom launch options for
 /// steam games.
@@ -9,14 +8,19 @@ struct Args {
     /// Extra program to launch before the game.
     #[arg(short = 'e', long = "extra")]
     extra_programs: Vec<String>,
+
+    /// The commands required to launch the game.
+    /// If launched from Steam, this argument will be %command%.
+    #[arg(last = true)]
+    game_commands: Vec<String>,
 }
 
 impl Args {
-    fn refine(self, game_args: Vec<String>) -> RefinedArgs {
+    fn refine(self) -> RefinedArgs {
         RefinedArgs {
             extra_programs: self.extra_programs,
-            game_command: game_args[0].clone(),
-            game_args: game_args[1..].to_vec(),
+            game_command: self.game_commands[0].clone(),
+            game_args: self.game_commands[1..].to_vec(),
         }
     }
 }
@@ -34,12 +38,5 @@ pub struct LaunchOption {
 }
 
 pub fn args() -> RefinedArgs {
-    let args = std::env::args().collect::<Vec<_>>();
-    let Some((args_to_parse, game_args)) = args.split_inclusive(|arg| arg == "--").collect_tuple()
-    else {
-        eprintln!("No game command specified.");
-        std::process::exit(1);
-    };
-
-    Args::parse_from(args_to_parse).refine(game_args.to_vec())
+    Args::parse().refine()
 }
