@@ -1,7 +1,7 @@
 #[cfg(windows)]
 extern crate winres;
 
-#[cfg(windows)]
+#[cfg(all(windows, not(debug_assertions)))]
 fn main() {
     let mut res = winres::WindowsResource::new();
     res.set_manifest(
@@ -18,4 +18,9 @@ fn main() {
     "#,
     );
     res.compile().unwrap();
+}
+
+#[cfg(not(all(windows, not(debug_assertions))))]
+fn main() {
+    println!("Not on Windows, or in debug mode. No need to compile the executable with an admin manifest.")
 }

@@ -1,10 +1,17 @@
-#![windows_subsystem = "windows"]
+#![cfg_attr(
+    all(target_os = "windows", not(debug_assertions),),
+    windows_subsystem = "windows"
+)]
+
 mod args;
+mod config;
 
 use args::args;
+use config::Config;
 use std::process::Command;
 
 fn main() {
+    let config = Config::get();
     let args = args();
 
     let mut extra_running = vec![];
