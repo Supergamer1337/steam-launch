@@ -31,12 +31,6 @@ pub struct RefinedArgs {
     pub game_args: Vec<String>,
 }
 
-#[derive(Clone, Debug)]
-pub struct LaunchOption {
-    pub name: String,
-    pub command: String,
-}
-
 pub fn args() -> RefinedArgs {
     Args::parse().refine()
 }
