@@ -1,11 +1,10 @@
 # Steam-Launch
 
-A simple program to add extra functionality to launching Steam games, simply by editing the game's launch options. Currently, the program only supports launching extra programs alongside the game, but more features will be added in the future (mostly according to my own needs).
+A simple program to add extra functionality to launching Steam games, simply by editing the game's launch options. Currently, the program supports launching extra programs alongside the game as well as running [Ludusavi](https://github.com/mtkennerly/ludusavi) backups when the game exits.
 
-Some of the features I plan to add are:
+Currently the following feature is still planned to be added:
 
 - Having multiple launch profiles for each game, e.g. one for playing the game normally, one for playing the game with mods, etc. This would open a controller friendly menu when launching the game, allowing you to choose which profile to use.
-- Save game backups for non-steam/non-cloud games using [Ludusavi](https://github.com/mtkennerly/ludusavi). Making sure you can always backup your save games.
 
 ## Installation
 
@@ -17,15 +16,36 @@ Currently, the program only supports (or well, is tested on at least) Windows, b
 
 ## Usage
 
-The program currently only supports one command, `-e` or `--extra` which takes a path (or command) to the program you want to launch alongside the game. This can be used multiple times to launch multiple programs alongside the game. When the game closes, the programs will also close.
+If you are using Steam, the `%command%` parameter is used to launch the game, so you will have to add `-- %command%` to the end of the command. If you are not using Steam (for some reason), you have to manually specify the command to launch the game (by replacing `%command%`, for example `path/to/game.exe`).
 
-### Example
+The program currently supports the two following commands:
+
+### Extra
+
+This done by using `-e` or `--extra` which takes a path (or command) to the program you want to launch alongside the game. This can be used multiple times to launch multiple programs. When the game closes, the programs will also close.
+
+#### Example
 
 ```ps
 "path/to/steam-launch.exe" -e "path/to/program.exe" -e "path/to/another/program.exe" -- %command%
 ```
 
-Where %command% is a special property in the Steam launch options that will be replaced by whatever steam would normally launch. This is usually the path to the game's executable.
+### Save Backup
+
+This is done by first installing and configuring [Ludusavi](https://github.com/mtkennerly/ludusavi), and then configuring the program to use it. This is done by adding a `config.toml` alongside the program with the following content:
+
+```toml
+[ludusavi]
+path = "path/to/ludusavi.exe"
+```
+
+Then you add `-s` or `--save` along with the name of the game you want to save the backup of (as it is named in Ludusavi). This will run the backup for that game when the game exits.
+
+#### Example
+
+```ps
+"path/to/steam-launch.exe" -s "game-name" -- %command%
+```
 
 ## Contributing
 
