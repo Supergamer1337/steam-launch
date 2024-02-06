@@ -75,7 +75,10 @@ fn main() {
 }
 
 fn launch_game(args: &RefinedArgs) -> Result<()> {
-    Command::new(&args.game_command)
+    Command::new("Start-Process")
+        .arg("-Verb RunAsUser")
+        .arg("--")
+        .arg(&args.game_command)
         .args(&args.game_args)
         .spawn()?
         .wait()?;
