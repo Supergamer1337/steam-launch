@@ -35,6 +35,7 @@ fn main() {
 
     info!("Parsing command line arguments...");
     let args = args();
+    debug!("Arguments: {:?}", args);
 
     let mut extra_programs = vec![];
     if !args.extra_programs.is_empty() {
@@ -54,7 +55,7 @@ fn main() {
     info!("Launching game...");
     if let Err(err) = launch_game(&args) {
         error!("Error occurred while launching/running game");
-        debug!("Error: {}", err);
+        info!("Error: {}", err);
     }
 
     info!("Game exited. Starting post-game tasks...");
@@ -62,7 +63,7 @@ fn main() {
         info!("Backing up saves...");
         if let Err(err) = saves::backup(&config, &args) {
             error!("Failed to backup saves");
-            debug!("Error: {}", err);
+            info!("Error: {}", err);
         }
     }
 
@@ -75,10 +76,7 @@ fn main() {
 }
 
 fn launch_game(args: &RefinedArgs) -> Result<()> {
-    Command::new("Start-Process")
-        .arg("-Verb RunAsUser")
-        .arg("--")
-        .arg(&args.game_command)
+    Command::new(&args.game_command)
         .args(&args.game_args)
         .spawn()?
         .wait()?;

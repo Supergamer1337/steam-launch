@@ -1,4 +1,5 @@
 use clap::{arg, Parser};
+use tracing_subscriber::field::debug;
 
 /// Simple program to have multiple custom launch options for
 /// steam games.
@@ -31,6 +32,7 @@ impl Args {
     }
 }
 
+#[derive(Debug)]
 pub struct RefinedArgs {
     pub extra_programs: Vec<String>,
     pub ludusavi_save: Option<String>,
