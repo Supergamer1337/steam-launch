@@ -1,8 +1,10 @@
-use std::process::Command;
+use std::{os::windows::process::CommandExt, process::Command};
 
 use crate::args::RefinedArgs;
 use crate::config::Config;
 use anyhow::{anyhow, Result};
+
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 
 pub fn backup(config: &Config, args: &RefinedArgs) -> Result<()> {
     if !config.ludusavi_enabled() {
@@ -22,6 +24,7 @@ pub fn backup(config: &Config, args: &RefinedArgs) -> Result<()> {
         .arg("backup")
         .arg("--force")
         .arg(game_name)
+        .creation_flags(CREATE_NO_WINDOW)
         .spawn()?
         .wait()?;
 
