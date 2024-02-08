@@ -55,7 +55,7 @@ fn main() {
     info!("Launching game...");
     if let Err(err) = launch_game(&args) {
         error!("Error occurred while launching/running game");
-        info!("Error: {}", err);
+        debug!("Error: {}", err);
     }
 
     info!("Game exited. Starting post-game tasks...");
@@ -63,7 +63,7 @@ fn main() {
         info!("Backing up saves...");
         if let Err(err) = saves::backup(&config, &args) {
             error!("Failed to backup saves");
-            info!("Error: {}", err);
+            debug!("Error: {}", err);
         }
     }
 
