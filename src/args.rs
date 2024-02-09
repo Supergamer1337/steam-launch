@@ -9,6 +9,11 @@ struct Args {
     #[arg(short = 'e', long = "extra", num_args = 1)]
     extra_programs: Vec<String>,
 
+    /// Programs to launch with admin privileges. Should only be used if it
+    /// is truly necessary.
+    #[arg(short = 'a', long = "admin", num_args = 1)]
+    admin_programs: Vec<String>,
+
     /// Backup the save files using the ludusavi `wrap` command. Requires
     /// the name of the game as known by ludusavi.
     #[arg(short = 's', long = "save", name = "LUDUSAVI_GAME_NAME")]
@@ -24,6 +29,7 @@ impl Args {
     fn refine(self) -> RefinedArgs {
         RefinedArgs {
             extra_programs: self.extra_programs,
+            admin_programs: self.admin_programs,
             ludusavi_save: self.ludusavi_save,
             game_command: self.game_commands[0].clone(),
             game_args: self.game_commands[1..].to_vec(),
@@ -34,6 +40,7 @@ impl Args {
 #[derive(Debug)]
 pub struct RefinedArgs {
     pub extra_programs: Vec<String>,
+    pub admin_programs: Vec<String>,
     pub ludusavi_save: Option<String>,
     pub game_command: String,
     pub game_args: Vec<String>,

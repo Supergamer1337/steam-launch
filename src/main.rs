@@ -52,6 +52,21 @@ fn main() {
         info!("No extra programs to start. Continuing...");
     }
 
+    let mut admin_programs = vec![];
+    if !args.admin_programs.is_empty() {
+        info!("Admin programs given. Starting them...");
+        match extra_programs::start_admin(&args.admin_programs) {
+            Ok(p) => admin_programs = p,
+            Err(err) => {
+                debug!("Error while starting programs: {}", err);
+                error!("Some program failed to start. Exiting...");
+                process::exit(1);
+            }
+        };
+    } else {
+        info!("No admin programs to start. Continuing...");
+    }
+
     info!("Launching game...");
     if let Err(err) = launch_game(&args) {
         error!("Error occurred while launching/running game");
@@ -70,6 +85,11 @@ fn main() {
     if !args.extra_programs.is_empty() {
         info!("Killing extra programs...");
         extra_programs::kill(extra_programs);
+    }
+
+    if !args.admin_programs.is_empty() {
+        info!("Killing admin programs...");
+        extra_programs::kill_admin(admin_programs);
     }
 
     info!("Exiting...");

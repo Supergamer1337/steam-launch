@@ -1,3 +1,4 @@
+use crate::util::AdminRunner;
 use anyhow::{anyhow, Result};
 use std::process::{Child, Command};
 
@@ -17,6 +18,16 @@ pub fn start(programs: &[String]) -> Result<Programs> {
         .collect()
 }
 
+pub fn start_admin(programs: &[String]) -> Result<Programs> {
+    programs.iter().map(|p| AdminRunner::new(p).run()).collect()
+}
+
 pub fn kill(programs: Programs) {
     programs.into_iter().for_each(|mut p| p.kill().ignore());
+}
+
+pub fn kill_admin(programs: Programs) {
+    programs
+        .into_iter()
+        .for_each(|mut p| AdminRunner::kill(&mut p).ignore());
 }
